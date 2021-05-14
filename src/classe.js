@@ -1,15 +1,28 @@
 const { RESTDataSource } = require('apollo-datasource-rest');
+const accessToken = require('./token');
 
 
-class SquareAPI extends RESTDataSource {
+class VisitsAPI extends RESTDataSource {
     constructor() {
       super();
-      this.baseURL = 'http://localhost:3333/';
+      this.baseURL = 'http://localhost:5050';
+    }
+    willSendRequest(request) {
+      request.headers.set('Authorization', accessToken);
     }
   
-    async calc(meters , value) {
-      return this.get(`?meters=${meters}&value=${value}`);
-    }
+    async add(siteId , propertyReference, visitDate) {
+      return this.post('/',{
+        siteId: siteId,
+        propertyReference: propertyReference,
+        visitDate: visitDate
+      }
+    )
   }
 
-  module.exports = SquareAPI
+  async load_() {
+    return this.get('/')
+  }
+}
+
+  module.exports = VisitsAPI

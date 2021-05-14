@@ -1,6 +1,6 @@
 // const { RESTDataSource } = require('apollo-datasource-rest');
 const { ApolloServer, gql } =  require('apollo-server');
-const SquareAPI = require('./classe');
+const VisitsAPI = require('./classe');
 
 const resolvers = {
     Query: {
@@ -10,10 +10,15 @@ const resolvers = {
           years: 12
         }
       },
-      square: async(_, { meters, value }, { dataSources }) => {
-        return await dataSources.square.calc(meters, value)
+      load: async (_,__,{dataSources}) => {
+        return await dataSources.visitsApi.load_()
       }
-    }
+    },
+    Mutation:{
+      visits: async(_, { siteId, propertyReference, visitDate }, { dataSources }) => {
+        return await dataSources.visitsApi.add(siteId, propertyReference, visitDate )
+      }
+  }
   };
 
 const typeDefs = gql`
@@ -22,10 +27,25 @@ const typeDefs = gql`
       name: String
       years: Int
     }
+
+      
+  type Visit {
+    id: String,
+    siteId: Int,
+    propertyReference: String,
+    visitDate: Int,
+    status: String
+    }
+
   type Query {
     get: User
-    square(meters: String, value: String): String
+    load: [Visit]
   }
+
+  type Mutation {
+    visits(siteId: String, propertyReference: String, visitDate: String): String
+  }
+
 `;
 
 
@@ -33,7 +53,7 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   dataSources:() => ({
-    square: new SquareAPI()
+    visitsApi: new VisitsAPI()
   })
 });
 
