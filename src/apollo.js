@@ -10,7 +10,8 @@ const resolvers = {
           years: 12
         }
       },
-      load: async (_,__,{dataSources}) => {
+      load: async (_,__, {dataSources}) => {
+  
         return await dataSources.visitsApi.load_()
       }
     },
@@ -48,13 +49,18 @@ const typeDefs = gql`
 
 `;
 
+const context = ({req , connection}) => {
+  return req.headers
+}
+
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
   dataSources:() => ({
     visitsApi: new VisitsAPI()
-  })
+  }),
+  context
 });
 
 

@@ -8,7 +8,8 @@ class VisitsAPI extends RESTDataSource {
       this.baseURL = 'http://localhost:5050';
     }
     willSendRequest(request) {
-      request.headers.set('Authorization', accessToken);
+      const jwt = this.context.authorization.split(' ')
+      request.headers.set('Authorization', jwt[1]);
     }
   
     async add(siteId , propertyReference, visitDate) {
