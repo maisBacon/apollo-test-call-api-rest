@@ -7,6 +7,7 @@ class VisitsAPI extends RESTDataSource {
       super();
       this.baseURL = 'http://localhost:5050';
     }
+
     willSendRequest(request) {
       const jwt = this.context.authorization.split(' ')
       request.headers.set('Authorization', jwt[1]);

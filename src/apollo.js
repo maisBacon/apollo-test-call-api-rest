@@ -4,12 +4,6 @@ const VisitsAPI = require('./classe');
 
 const resolvers = {
     Query: {
-      get: async (_, args, context ) => {  
-        return {
-          name:'renan',
-          years: 12
-        }
-      },
       load: async (_,__, {dataSources}) => {
   
         return await dataSources.visitsApi.load_()
@@ -22,14 +16,7 @@ const resolvers = {
   }
   };
 
-const typeDefs = gql`
-  
-  type User {
-      name: String
-      years: Int
-    }
-
-      
+const typeDefs = gql`    
   type Visit {
     id: String,
     siteId: Int,
@@ -39,7 +26,7 @@ const typeDefs = gql`
     }
 
   type Query {
-    get: User
+
     load: [Visit]
   }
 
